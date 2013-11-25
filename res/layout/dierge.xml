@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#EEEEEE"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="fill_parent"
+            android:layout_height="200sp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:paddingBottom="5dp" >
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="55dp"
+                android:background="#eeeeee"
+                android:paddingBottom="1dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="5dp"
+                android:text="详细" />
+
+            <TextView
+                android:id="@+id/textView3a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView3"
+                android:layout_marginLeft="12dp"
+                android:background="#eeeeee"
+                android:paddingBottom="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="1dp"
+                android:text="资料" />
+
+            <Button
+                android:id="@+id/buttonWeibo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/textView3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="55dp"
+                android:layout_toRightOf="@+id/textView3"
+                android:background="#eeeeee"
+                android:textSize="13sp"
+                android:text="微博" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/textView3a"
+                android:layout_alignLeft="@id/buttonWeibo"
+                android:layout_alignRight="@id/buttonWeibo"
+                android:layout_below="@+id/buttonWeibo"
+                android:background="#eeeeee"
+                android:text=" weibo" />
+
+            <Button
+                android:id="@+id/buttonGzs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/buttonWeibo"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="55dp"
+                android:layout_toRightOf="@+id/buttonWeibo"
+                android:background="#eeeeee"
+                android:textSize="13sp"
+                android:text="关注数" />
+            
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/buttonGzs"
+                android:layout_alignLeft="@id/buttonGzs"
+                android:layout_alignBottom="@id/textView4"
+                android:layout_alignRight="@id/buttonGzs"
+                android:background="#eeeeee"
+                android:text="关注数" />
+            
+            <Button
+                android:id="@+id/buttonFss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/buttonWeibo"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="55dp"
+                android:layout_toRightOf="@+id/buttonGzs"
+                android:background="#eeeeee"
+                android:textSize="13sp"
+                android:text="粉丝数" />
+            
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/buttonFss"
+                android:layout_alignLeft="@id/buttonFss"
+                android:layout_alignBottom="@id/textView5"
+                android:layout_alignRight="@id/buttonFss"
+                android:background="#eeeeee"
+                android:text="粉丝数" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
+            android:text="@string/wb221"
+            android:textColor="#AAAAAA" />
+
+        <ListView
+            android:id="@+id/listView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6sp"
+            android:layout_marginRight="7sp"
+            android:background="#FFFFFF"
+            android:divider="#AAAAAA"
+            android:dividerHeight="1px" >
+        </ListView>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="60sp"
+        android:layout_height="60sp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="170dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="205dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/xwb" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="210dp"
+        android:layout_marginTop="205dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/hylb" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="235dp"
+        android:text="@string/jj"
+        android:textColor="#B0B0B0"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageButton1"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/imageButton1"
+        android:text="@string/mzssmkycm"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView1"
+        android:layout_toRightOf="@+id/textView1"
+        android:text="Te"
+        android:textColor="#FFFF00"
+        android:textSize="18sp" />
+    
+    <TextView
+        android:id="@+id/nianling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView9"
+        android:layout_toRightOf="@+id/textView9"
+        android:text="nl"
+        android:textColor="#FFFF00"
+        android:textSize="18sp" />
+
+</RelativeLayout>
