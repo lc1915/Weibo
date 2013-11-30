@@ -121,7 +121,7 @@ public class MainActivity extends Activity {
 				Log.e("Exception", e.getMessage(), e);
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class MainActivity extends Activity {
 
 		mTweets = new ArrayList<HashMap<String, Object>>();
 
-		//点击选择背景按钮（调用sd卡）
+		// 点击选择背景按钮（调用sd卡）
 		ImageButton xzbj = (ImageButton) findViewById(R.id.imageButton1);
 		xzbj.setOnClickListener(new OnClickListener() {
 
@@ -146,7 +146,7 @@ public class MainActivity extends Activity {
 			}
 		});
 
-		//点击选择头像按钮（调用sd卡）
+		// 点击选择头像按钮（调用sd卡）
 		ImageButton xztx = (ImageButton) findViewById(R.id.imageButton2);
 		xztx.setOnClickListener(new OnClickListener() {
 
@@ -163,7 +163,7 @@ public class MainActivity extends Activity {
 
 		mTweetList = (ListView) findViewById(R.id.listView1);
 
-		//点击添加微博按钮
+		// 点击添加微博按钮
 		jia = (Button) findViewById(R.id.button4);
 		jia.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -180,7 +180,7 @@ public class MainActivity extends Activity {
 				new int[] { R.id.tweet_list_item_tweet });
 		mTweetList.setAdapter(mAdapter);
 
-		//点击“确认并保存”按钮
+		// 点击“确认并保存”按钮
 		Button queren = (Button) findViewById(R.id.button2);
 		queren.setOnClickListener(new OnClickListener() {
 
@@ -205,15 +205,48 @@ public class MainActivity extends Activity {
 				String json = SaveAsJSON();
 				intent.putExtra("json", json.toString());
 
-				Utils.SaveToFile("/sdcard/weibo/uniqueTask1.json", SaveAsJSON());
-
 				startActivity(intent);
 				finish();
 			}
 		});
 
+		Button duqu = (Button) findViewById(R.id.buttondq);
+		duqu.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				info = new StringBuffer();
+
+				// 判断外部存储卡是否存在
+				if (!Environment.getExternalStorageState().equals(
+						Environment.MEDIA_MOUNTED)) {
+					Toast.makeText(getApplicationContext(), "读取失败，SD存储卡不存在！",
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+
+				// 判断文件是否存在
+				String path = Environment.getExternalStorageDirectory()
+						.toString()
+						+ File.separator
+						+ "aaaaaa"
+						+ File.separator + FILENAME;
+				file = new File(path);
+
+				if (!file.exists()) {
+					Toast.makeText(getApplicationContext(), "XML文件不存在！",
+							Toast.LENGTH_LONG).show();
+					return;
+				}
+				// 解析JSON文件
+				LoadViaJSON(json.toString());
+
+				Toast.makeText(getApplicationContext(), info.toString(),
+						Toast.LENGTH_LONG).show();
+
+			}
+		});
+
 	}
-	
 
 	void SaveTweetList() {
 
@@ -296,14 +329,15 @@ public class MainActivity extends Activity {
 	void SetDescription(String description) {
 		jianjie = description;
 	}
-	static JSONObject json;
-	static JSONObject Getjson(JSONObject json0)
-	{
-		return json0=json;
-	}
-	
-	String SaveAsJSON() {
 
+	static JSONObject json;
+
+	static JSONObject Getjson(JSONObject json0) {
+		return json0 = json;
+	}
+
+	String SaveAsJSON() {
+		PrintStream ps = null;
 		try {
 			json = new JSONObject();
 			json.put("backgroundUri", selectedImage == null ? ""
@@ -332,6 +366,32 @@ public class MainActivity extends Activity {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		// 判断外部存储卡是否存在
+		if (!Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+			Toast.makeText(getApplicationContext(), "读取失败，SD存储卡不存在！",
+					Toast.LENGTH_LONG).show();
+			return null;
+		}
+
+		// 初始化File
+		String path = Environment.getExternalStorageDirectory().toString()
+				+ File.separator + "aaaaaa" + File.separator + FILENAME;
+		file = new File(path);
+
+		// 如果当前文件的父文件夹不存在，则创建文件夹
+		if (!file.getParentFile().exists())
+			file.getParentFile().mkdirs();
+
+		try {
+			ps = new PrintStream(new FileOutputStream(file));
+			ps.print(json.toString());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (ps != null)
+				ps.close();
 		}
 		return null;
 
