@@ -116,6 +116,23 @@
                 android:layout_alignRight="@id/buttonFss"
                 android:background="#eeeeee"
                 android:text="粉丝数" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="搜索" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/button1"
+                android:text="返回" />
+
         </RelativeLayout>
 
         <TextView
@@ -183,7 +200,7 @@
         android:layout_alignTop="@+id/imageButton1"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/imageButton1"
-        android:text="@string/mzssmkycm"
+        android:text="nicheng"
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
 
@@ -206,5 +223,13 @@
         android:text="nl"
         android:textColor="#FFFF00"
         android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/guanzhu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/nianling"
+        android:text="关注" />
 
 </RelativeLayout>

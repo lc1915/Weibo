@@ -95,6 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25sp"
                     android:background="@drawable/bg_border4"
+                    android:hint="请输入用户名"
                     android:ems="10" />
             </TableRow>
 

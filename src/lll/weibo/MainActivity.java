@@ -31,10 +31,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.CursorWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.net.Uri;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -57,6 +59,7 @@ public class MainActivity extends Activity {
 	private static int RESULT_LOAD_IMAGE = 0;
 	private static int RESULT_LOAD_IMAGE1 = 1;
 
+	private DBManager mgr;
 	private int num = 0;
 
 	Uri selectedImage = null;
@@ -71,6 +74,8 @@ public class MainActivity extends Activity {
 	ImageView imageView2 = null;
 	ListView mTweetList = null;
 	Button jia = null;
+	ArrayList<Tweet> tweets = null;
+	String tweet;
 
 	private String nicheng = null;
 	EditText xingbiexx = null;
@@ -79,7 +84,10 @@ public class MainActivity extends Activity {
 	private String fensishu = null;
 	private String jianjie = null;
 	private String nianling = null;
-	String mSession;
+	private String nation;
+	int age;
+	int followings;
+	int followers;
 
 	private File file = null;
 	private static final String FILENAME = "theFirstMessage.json";
@@ -130,6 +138,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		mTweets = new ArrayList<HashMap<String, Object>>();
+		mgr = new DBManager(this);
+		tweets=new ArrayList<Tweet>();
 
 		// 点击选择背景按钮（调用sd卡）
 		ImageButton xzbj = (ImageButton) findViewById(R.id.imageButton1);
@@ -189,21 +199,47 @@ public class MainActivity extends Activity {
 				nicheng = ((EditText) findViewById(R.id.editText1)).getText()
 						.toString();
 				RadioButton xingbie = (RadioButton) findViewById(R.id.radioButton1);
+				RadioButton guoji = (RadioButton) findViewById(R.id.radioButton3);
 				guanzhushu = ((EditText) findViewById(R.id.editText3))
 						.getText().toString();
 				fensishu = ((EditText) findViewById(R.id.editTextfs)).getText()
 						.toString();
+				followings = Integer.parseInt(guanzhushu);
+				followers = Integer.parseInt(fensishu);
 				jianjie = ((EditText) findViewById(R.id.editText6)).getText()
 						.toString();
 				nianling = ((EditText) findViewById(R.id.editText4)).getText()
 						.toString();
+				age = Integer.parseInt(nianling);
 				gender = xingbie.isChecked() ? "   男" : "   女";
-
+				nation = guoji.isChecked() ? "   中国" : "   美国";
+				
+				ArrayList<Person> persons = new ArrayList<Person>();
+				Person person1 = new Person(selectedImage.toString(),
+						selectedImage1.toString(), nicheng, gender, nation, age,
+						followings, followers, jianjie,null,null);
+				persons.add(person1);
+				mgr.add(persons);
+				
+				ListAdapter listAdapter = mTweetList.getAdapter();
+				
+				for (int i = 0; i < listAdapter.getCount(); i++) {
+					View listItem = mTweetList.getChildAt(i);
+					tweet = ((EditText) listItem
+							.findViewById(R.id.tweet_list_item_tweet)).getText()
+							.toString();
+					Tweet tweet1=new Tweet(nicheng,tweet);
+					tweets.add(tweet1);
+					mgr.add0(tweets);
+					Log.w("SetupActivity", "Current tweet is \"" + tweet + "\".");
+				}
+				
+				
 				Intent intent = new Intent();
 				intent.setClass(MainActivity.this, Dierge.class);
 
-				String json = SaveAsJSON();
-				intent.putExtra("json", json.toString());
+				//String json = SaveAsJSON();
+				//intent.putExtra("json", json.toString());
 
 				startActivity(intent);
 				finish();
@@ -246,6 +282,13 @@ public class MainActivity extends Activity {
 			}
 		});
 
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		// 应用的最后一个Activity关闭时应释放DB
+		mgr.closeDB();
 	}
 
 	void SaveTweetList() {

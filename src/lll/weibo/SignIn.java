@@ -1,5 +1,7 @@
 package lll.weibo;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.nsd.NsdManager.RegistrationListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,12 +23,17 @@ public class SignIn extends Activity {
 	Button login = null;
 	Button regist = null;
 	SharedPreferences preferences;
+	static String username;
+	static String password;
+	
+	private DBManager mgr;
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sign_in);
+		
+		mgr = new DBManager(this);
 
 		mUsername = (EditText) findViewById(R.id.editText1);
 		mPassword = (EditText) findViewById(R.id.editText2);
@@ -35,9 +43,10 @@ public class SignIn extends Activity {
 			@Override
 			public void onClick(View v) {
 
-				String username = mUsername.getText().toString();
-				String password = mPassword.getText().toString();
-
+				username = mUsername.getText().toString();
+				password = mPassword.getText().toString();
+				
+				
 				API api = API.GetInstance(SignIn.this);
 				Response res = api.Register(username, password);
 
@@ -50,6 +59,11 @@ public class SignIn extends Activity {
 					editor.putString("username", username);
 					editor.putString("password", password);
 					editor.commit();
+					
+					ArrayList<Sign> signs = new ArrayList<Sign>();
+					Sign sign1 = new Sign(username,password);
+					signs.add(sign1);
+					mgr.add1(signs);
 
 					Intent intent = new Intent(SignIn.this, MainActivity.class);
 					intent.putExtra("session", res.GetSession());
@@ -69,8 +83,8 @@ public class SignIn extends Activity {
 		login.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String username = mUsername.getText().toString();
-				String password = mPassword.getText().toString();
+				username = mUsername.getText().toString();
+				password = mPassword.getText().toString();
 
 				API api = API.GetInstance(SignIn.this);
 				Response res = api.Login(username, password);
@@ -83,7 +97,7 @@ public class SignIn extends Activity {
 					editor.putString("username", username);
 					editor.putString("password", password);
 					editor.commit();
-
+					
 					Intent intent = new Intent(SignIn.this, Dierge.class);
 					intent.putExtra("session", res.GetSession());
 					intent.putExtra("user", res.GetExtra());

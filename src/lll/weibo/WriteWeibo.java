@@ -35,6 +35,7 @@ import android.widget.TextView;
 public class WriteWeibo extends Activity {
 	
 	private static int RESULT_LOAD_IMAGE = 0;
+	private DBManager mgr;
 	Uri selectedImage = null;
 
 	Button exit = null;
@@ -44,6 +45,7 @@ public class WriteWeibo extends Activity {
 	ArrayList<HashMap<String, Object>> mTweets = null;
 	String newWeibo = null;
 	String newWeibo1 = null;
+	String nicheng=null;
 	ImageView imageView1=null;
 	
 	@Override
@@ -72,10 +74,11 @@ public class WriteWeibo extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.write_weibo);
+		mgr = new DBManager(this);
 
 		// Í«≥∆
 		Intent intent = getIntent();
-		String nicheng = intent.getStringExtra("nicheng");
+		nicheng = intent.getStringExtra("nicheng");
 		TextView nichenga = (TextView) findViewById(R.id.textView1);
 		nichenga.setText(nicheng);
 		
@@ -98,7 +101,7 @@ public class WriteWeibo extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setClass(WriteWeibo.this, Dierge.class);
-				setResult(3, intent);
+				//setResult(3, intent);
 				finish();
 			}
 		});
@@ -119,11 +122,17 @@ public class WriteWeibo extends Activity {
 				}
 				matcher.appendTail(sbr);
 				newWeibo1 = sbr.toString();
+				
+				ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+				Tweet tweet1 = new Tweet(nicheng,newWeibo1);
+				tweets.add(tweet1);
+				mgr.add0(tweets);
 
 				Intent intent = new Intent();
 				intent.setClass(WriteWeibo.this, Dierge.class);
-				intent.putExtra("newweibo", newWeibo1);
-				setResult(2, intent);
+				//intent.putExtra("newweibo", newWeibo1);
+				//setResult(2, intent);
+				startActivity(intent);
 				finish();
 			}
 		});

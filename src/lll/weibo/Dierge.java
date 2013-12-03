@@ -3,6 +3,7 @@ package lll.weibo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,18 +14,12 @@ import org.json.JSONObject;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -48,15 +43,19 @@ public class Dierge extends Activity {
 	TextView mTweets1 = null;
 	TextView wbs = null;
 	TextView xxzl = null;
-	TextView wb = null;
 	TextView jj = null;
 	Button weiboButton = null;
+	Button guanzhushuButton=null;
+	Button fensishuButton=null;
+	Button guanzhu=null;
+	Button search=null;
 	ArrayList<HashMap<String, Object>> mTweets = null;
 	SimpleAdapter mAdapter = null;
 	HashMap<String, Object> item = null;
 
 	String a = null;
 	TextView t = null;
+	private DBManager mgr;
 
 	JSONObject json0;
 	String mSession = null;
@@ -65,18 +64,6 @@ public class Dierge extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		if (savedInstanceState == null) {
-
-			mSession = getIntent().getStringExtra("session");
-			mUserId = getIntent().getIntExtra("userId", API.USER_ID_UNKNOWN);
-
-		} else {
-
-			mSession = savedInstanceState.getString("session");
-			mUserId = savedInstanceState.getInt("userId", API.USER_ID_UNKNOWN);
-
-		}
 		setContentView(R.layout.dierge);
 
 		selectedImage = (ImageView) findViewById(R.id.imageView1);
@@ -93,7 +80,41 @@ public class Dierge extends Activity {
 		wbs = (TextView) findViewById(R.id.textView4);
 		mTweets = new ArrayList<HashMap<String, Object>>();
 
-		Display(getIntent().getStringExtra("json"));
+		// Display(getIntent().getStringExtra("json"));
+
+		mgr = new DBManager(this);
+		Person person = mgr.query0();
+		Integer a = person.followings;
+		Integer b = person.followers;
+		Integer c = person.age;
+		final String name=person.name;
+		selectedImage.setImageURI(Uri.parse(person.background));
+		selectedImage1.setImageURI(Uri.parse(person.icon));
+		nicheng.setText(person.name);
+		gender.setText(" " + person.gender);
+		guanzhushu.setText("  " + a.toString());
+		fensishu.setText("  " + b.toString());
+		nianling.setText("   " + c.toString() + "Ëê");
+		jianjie.setText("¼ò½é£º" + person.info);
+
+		List<Tweet> tweets = mgr.query1();
+		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
+		int i=0;
+		for (Tweet tweet0 : tweets) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("name", tweet0.name);
+			map.put("tweet", tweet0.tweet);
+			list.add(map);
+			i++;
+		}
+		SimpleAdapter adapter = new SimpleAdapter(this, list,
+				android.R.layout.simple_list_item_2, new String[] { "name",
+						"tweet" }, new int[] { android.R.id.text1,
+						android.R.id.text2 });
+		mTweetList.setAdapter(adapter);
+		
+		mTweets1.setText("Î¢²©("+i+")");
+		wbs.setText(" "+i+" ");
 
 		// µã»÷ImageButton¡°Ð´Î¢²©¡±
 		final String nichengs = nicheng.getText().toString();
@@ -114,21 +135,44 @@ public class Dierge extends Activity {
 		weiboButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
 				Intent intent = new Intent();
 				intent.setClass(Dierge.this, WeiboList.class);
-
-				json0 = MainActivity.Getjson(json0);
-
-				intent.putExtra("json", json0.toString());
-
+				//json0 = MainActivity.Getjson(json0);
+				//intent.putExtra("json", json0.toString());
 				startActivity(intent);
-
+			}
+		});
+		
+		guanzhushuButton=(Button)findViewById(R.id.buttonGzs);
+		guanzhushuButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setClass(Dierge.this, Followings.class);
+				startActivity(intent);
+			}
+		});
+		
+		fensishuButton=(Button)findViewById(R.id.buttonFss);
+		fensishuButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent();
+				intent.setClass(Dierge.this, Followers.class);
+				startActivity(intent);
+			}
+		});
+		
+		search=(Button)findViewById(R.id.button1);
+		search.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent();
+				intent.setClass(Dierge.this, Search.class);
+				startActivity(intent);
 			}
 		});
 	}
-
-	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -325,6 +369,7 @@ public class Dierge extends Activity {
 				}
 			});
 
+
 			// µã»÷Button¡°Î¢²©¡±
 			weiboButton = (Button) findViewById(R.id.buttonWeibo);
 			weiboButton.setOnClickListener(new OnClickListener() {
@@ -343,7 +388,98 @@ public class Dierge extends Activity {
 				}
 			});
 		}
+		
+		if (2 == requestCode && resultCode == 4) {
+			selectedImage = (ImageView) findViewById(R.id.imageView1);
+			selectedImage1 = (ImageView) findViewById(R.id.imageButton1);
 
+			nicheng = (TextView) findViewById(R.id.textView1);
+			gender = (TextView) findViewById(R.id.textView9);
+			guanzhushu = (TextView) findViewById(R.id.textView5);
+			fensishu = (TextView) findViewById(R.id.textView6);
+			jianjie = (TextView) findViewById(R.id.textView2);
+			nianling = (TextView) findViewById(R.id.nianling);
+			mTweetList = (ListView) findViewById(R.id.listView1);
+			mTweets1 = (TextView) findViewById(R.id.textView8);
+			wbs = (TextView) findViewById(R.id.textView4);
+			mTweets = new ArrayList<HashMap<String, Object>>();
+
+			// Display(getIntent().getStringExtra("json"));
+
+			mgr = new DBManager(this);
+			Person person = mgr.query2();
+			Integer a = person.followings;
+			Integer b = person.followers;
+			Integer c = person.age;
+			selectedImage.setImageURI(Uri.parse(person.background));
+			selectedImage1.setImageURI(Uri.parse(person.icon));
+			nicheng.setText(person.name);
+			gender.setText(" " + person.gender);
+			guanzhushu.setText("  " + a.toString());
+			fensishu.setText("  " + b.toString());
+			nianling.setText("   " + c.toString() + "Ëê");
+			jianjie.setText("¼ò½é£º" + person.info);
+
+			List<Tweet> tweets = mgr.query3();
+			ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
+			int i=0;
+			for (Tweet tweet0 : tweets) {
+				HashMap<String, String> map = new HashMap<String, String>();
+				map.put("name", tweet0.name);
+				map.put("tweet", tweet0.tweet);
+				list.add(map);
+				i++;
+			}
+			SimpleAdapter adapter = new SimpleAdapter(this, list,
+					android.R.layout.simple_list_item_2, new String[] { "name",
+							"tweet" }, new int[] { android.R.id.text1,
+							android.R.id.text2 });
+			mTweetList.setAdapter(adapter);
+			
+			mTweets1.setText("Î¢²©("+i+")");
+			wbs.setText(" "+i+" ");
+
+			// µã»÷ImageButton¡°Ð´Î¢²©¡±
+			final String nichengs = nicheng.getText().toString();
+
+			writeWeibo = (ImageButton) findViewById(R.id.imageButton2);
+			writeWeibo.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent();
+					intent.setClass(Dierge.this, WriteWeibo.class);
+					intent.putExtra("nicheng", nichengs);
+					startActivityForResult(intent, 2);
+				}
+			});
+
+			// µã»÷Button¡°Î¢²©¡±
+			weiboButton = (Button) findViewById(R.id.buttonWeibo);
+			weiboButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent();
+					intent.setClass(Dierge.this, WeiboList.class);
+					//json0 = MainActivity.Getjson(json0);
+					//intent.putExtra("json", json0.toString());
+					startActivity(intent);
+				}
+			});
+			
+			guanzhu=(Button)findViewById(R.id.guanzhu);
+			guanzhu.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					ArrayList<Fan> fans = new ArrayList<Fan>();
+					Fan fan1 = new Fan(SignIn.username,Search.theusername);
+					fans.add(fan1);
+					mgr.add2(fans);
+					Toast.makeText(getApplicationContext(), "¹Ø×¢³É¹¦£¡",
+						     Toast.LENGTH_SHORT).show();
+				}
+			});
+		}
+		Toast.makeText(getApplicationContext(), "½øÈ¥ÁË°¡°¡°¡", Toast.LENGTH_LONG).show(); 
 	}
 
 }
