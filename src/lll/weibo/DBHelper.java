@@ -19,6 +19,13 @@ public class DBHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE IF NOT EXISTS person"
 				+ "(_id INTEGER PRIMARY KEY AUTOINCREMENT,background NVARCHAR,icon TEXT, name NVARCHAR,gender CHAR,nation CHAR, age CHAR,followings CHAR,followers CHAR, info TEXT)");
+		db.execSQL("CREATE TABLE IF NOT EXISTS tweet"
+				+ "(_id INTEGER PRIMARY KEY AUTOINCREMENT,name NVARCHAR,weibo TEXT)");
+		db.execSQL("CREATE TABLE IF NOT EXISTS sign"
+				+ "(_id INTEGER PRIMARY KEY AUTOINCREMENT, username NVARCHAR,password TEXT)");
+		db.execSQL("CREATE TABLE IF NOT EXISTS fan"
+				+ "(_id INTEGER PRIMARY KEY AUTOINCREMENT, name NVARCHAR,ilike TEXT)");
+		
 	}
 
 	// 如果DATABASE_VERSION值被改为2,系统发现现有数据库版本不同,即会调用onUpgrade

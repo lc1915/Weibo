@@ -24,7 +24,7 @@ public class Welcome extends Activity {
             editor0.putBoolean("isFirstRun", false);    
             editor0.commit();    
             Intent intent = new Intent();  
-            intent.setClass(Welcome.this,Dierge.class);  
+            intent.setClass(Welcome.this,SignIn.class);  
             startActivity(intent);  
             finish();
         } else {    
