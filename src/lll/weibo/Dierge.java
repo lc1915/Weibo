@@ -45,10 +45,10 @@ public class Dierge extends Activity {
 	TextView xxzl = null;
 	TextView jj = null;
 	Button weiboButton = null;
-	Button guanzhushuButton=null;
-	Button fensishuButton=null;
-	Button guanzhu=null;
-	Button search=null;
+	Button guanzhushuButton = null;
+	Button fensishuButton = null;
+	Button guanzhu = null;
+	Button search = null;
 	ArrayList<HashMap<String, Object>> mTweets = null;
 	SimpleAdapter mAdapter = null;
 	HashMap<String, Object> item = null;
@@ -81,25 +81,26 @@ public class Dierge extends Activity {
 		mTweets = new ArrayList<HashMap<String, Object>>();
 
 		// Display(getIntent().getStringExtra("json"));
-
 		mgr = new DBManager(this);
+		
+		//基本信息
 		Person person = mgr.query0();
-		Integer a = person.followings;
-		Integer b = person.followers;
 		Integer c = person.age;
-		final String name=person.name;
+		String a=person.nation;
+		if(a.equals("   中国")){
+			c=c+1;
+		}
 		selectedImage.setImageURI(Uri.parse(person.background));
 		selectedImage1.setImageURI(Uri.parse(person.icon));
 		nicheng.setText(person.name);
 		gender.setText(" " + person.gender);
-		guanzhushu.setText("  " + a.toString());
-		fensishu.setText("  " + b.toString());
 		nianling.setText("   " + c.toString() + "岁");
 		jianjie.setText("简介：" + person.info);
 
+		//微博相关
 		List<Tweet> tweets = mgr.query1();
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
-		int i=0;
+		int i = 0;
 		for (Tweet tweet0 : tweets) {
 			HashMap<String, String> map = new HashMap<String, String>();
 			map.put("name", tweet0.name);
@@ -112,9 +113,35 @@ public class Dierge extends Activity {
 						"tweet" }, new int[] { android.R.id.text1,
 						android.R.id.text2 });
 		mTweetList.setAdapter(adapter);
-		
-		mTweets1.setText("微博("+i+")");
-		wbs.setText(" "+i+" ");
+
+		mTweets1.setText("微博(" + i + ")");
+		wbs.setText(" " + i + " ");
+
+		// 查询登陆用户的关注数
+		List<Fan> fans = mgr.query4();
+		ArrayList<Map<String, String>> list0 = new ArrayList<Map<String, String>>();
+		int j = 0;
+		for (Fan fan0 : fans) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("name", fan0.name);
+			map.put("ilike", fan0.ilike);
+			list0.add(map);
+			j++;
+		}
+		guanzhushu.setText("  " + j + "　");
+
+		// 查询登陆用户的粉丝数
+		List<Fan> fans0 = mgr.query5();
+		ArrayList<Map<String, String>> list1 = new ArrayList<Map<String, String>>();
+		int k = 0;
+		for (Fan fan0 : fans0) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("name", fan0.name);
+			map.put("ilike", fan0.ilike);
+			list1.add(map);
+			k++;
+		}
+		fensishu.setText("  " + k + "　");
 
 		// 点击ImageButton“写微博”
 		final String nichengs = nicheng.getText().toString();
@@ -137,13 +164,14 @@ public class Dierge extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setClass(Dierge.this, WeiboList.class);
-				//json0 = MainActivity.Getjson(json0);
-				//intent.putExtra("json", json0.toString());
+				// json0 = MainActivity.Getjson(json0);
+				// intent.putExtra("json", json0.toString());
 				startActivity(intent);
 			}
 		});
-		
-		guanzhushuButton=(Button)findViewById(R.id.buttonGzs);
+
+		//点击Button“关注数”
+		guanzhushuButton = (Button) findViewById(R.id.buttonGzs);
 		guanzhushuButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -152,8 +180,9 @@ public class Dierge extends Activity {
 				startActivity(intent);
 			}
 		});
-		
-		fensishuButton=(Button)findViewById(R.id.buttonFss);
+
+		//点击Button“粉丝数”
+		fensishuButton = (Button) findViewById(R.id.buttonFss);
 		fensishuButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -162,8 +191,9 @@ public class Dierge extends Activity {
 				startActivity(intent);
 			}
 		});
-		
-		search=(Button)findViewById(R.id.button1);
+
+		//点击Button“搜索”
+		search = (Button) findViewById(R.id.button1);
 		search.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -369,7 +399,6 @@ public class Dierge extends Activity {
 				}
 			});
 
-
 			// 点击Button“微博”
 			weiboButton = (Button) findViewById(R.id.buttonWeibo);
 			weiboButton.setOnClickListener(new OnClickListener() {
@@ -388,7 +417,7 @@ public class Dierge extends Activity {
 				}
 			});
 		}
-		
+
 		if (2 == requestCode && resultCode == 4) {
 			selectedImage = (ImageView) findViewById(R.id.imageView1);
 			selectedImage1 = (ImageView) findViewById(R.id.imageButton1);
@@ -422,7 +451,7 @@ public class Dierge extends Activity {
 
 			List<Tweet> tweets = mgr.query3();
 			ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
-			int i=0;
+			int i = 0;
 			for (Tweet tweet0 : tweets) {
 				HashMap<String, String> map = new HashMap<String, String>();
 				map.put("name", tweet0.name);
@@ -435,9 +464,9 @@ public class Dierge extends Activity {
 							"tweet" }, new int[] { android.R.id.text1,
 							android.R.id.text2 });
 			mTweetList.setAdapter(adapter);
-			
-			mTweets1.setText("微博("+i+")");
-			wbs.setText(" "+i+" ");
+
+			mTweets1.setText("微博(" + i + ")");
+			wbs.setText(" " + i + " ");
 
 			// 点击ImageButton“写微博”
 			final String nichengs = nicheng.getText().toString();
@@ -460,26 +489,27 @@ public class Dierge extends Activity {
 				public void onClick(View v) {
 					Intent intent = new Intent();
 					intent.setClass(Dierge.this, WeiboList.class);
-					//json0 = MainActivity.Getjson(json0);
-					//intent.putExtra("json", json0.toString());
+					// json0 = MainActivity.Getjson(json0);
+					// intent.putExtra("json", json0.toString());
 					startActivity(intent);
 				}
 			});
-			
-			guanzhu=(Button)findViewById(R.id.guanzhu);
+
+			guanzhu = (Button) findViewById(R.id.guanzhu);
 			guanzhu.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					ArrayList<Fan> fans = new ArrayList<Fan>();
-					Fan fan1 = new Fan(SignIn.username,Search.theusername);
+					Fan fan1 = new Fan(SignIn.username, Search.theusername);
 					fans.add(fan1);
 					mgr.add2(fans);
 					Toast.makeText(getApplicationContext(), "关注成功！",
-						     Toast.LENGTH_SHORT).show();
+							Toast.LENGTH_SHORT).show();
 				}
 			});
 		}
-		Toast.makeText(getApplicationContext(), "进去了啊啊啊", Toast.LENGTH_LONG).show(); 
+		Toast.makeText(getApplicationContext(), "进去了啊啊啊", Toast.LENGTH_LONG)
+				.show();
 	}
 
 }

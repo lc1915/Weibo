@@ -10,19 +10,19 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class Followers extends Activity {
-	ListView FollowerList = null;
+public class Followings0 extends Activity{
+	ListView FollowingList = null;
 	HashMap<String, Object> item = null;
 	private DBManager mgr;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.weibo_list);
 		mgr = new DBManager(this);
-		FollowerList = (ListView) findViewById(R.id.listView1);
-
-		List<Fan> fans = mgr.query5();
+		FollowingList = (ListView) findViewById(R.id.listView1);
+		
+		List<Fan> fans = mgr.query40();
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (Fan fan0 : fans) {
 			HashMap<String, String> map = new HashMap<String, String>();
@@ -31,9 +31,9 @@ public class Followers extends Activity {
 			list.add(map);
 		}
 		SimpleAdapter adapter = new SimpleAdapter(this, list,
-				android.R.layout.simple_list_item_2, new String[] { "name",
+				android.R.layout.simple_list_item_2, new String[] { "ilike",
 						null }, new int[] { android.R.id.text1,
 						android.R.id.text2 });
-		FollowerList.setAdapter(adapter);
+		FollowingList.setAdapter(adapter);
 	}
 }

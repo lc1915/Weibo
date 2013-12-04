@@ -168,6 +168,32 @@ public class DBManager {
 		c.close();
 		return tweets;
 	}
+	
+	// 查询你搜索的人的微博
+	public List<Tweet> query10() {
+		ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+		String theusername = Search.theusername;
+		Cursor c = db.rawQuery("SELECT * FROM tweet where name like ?",
+				new String[] { theusername });
+		while (c.moveToNext()) {
+			Tweet tweet = new Tweet();
+			tweet._id = c.getInt(c.getColumnIndex("_id"));
+			tweet.name = c.getString(c.getColumnIndex("name"));
+			String tweet0 = c.getString(c.getColumnIndex("weibo"));
+			// 正则表达式替换字符
+			Pattern pattern = Pattern.compile("我操|你妈|卧槽|你妹");
+			Matcher matcher = pattern.matcher(tweet0.toString());
+			StringBuffer sbr = new StringBuffer();
+			while (matcher.find()) {
+				matcher.appendReplacement(sbr, "么么哒");
+			}
+			matcher.appendTail(sbr);
+			tweet.tweet = sbr.toString();
+			tweets.add(tweet);
+		}
+		c.close();
+		return tweets;
+	}
 
 	// 查询你所搜索的那个用户的个人信息
 	public Person query2() {
@@ -237,6 +263,23 @@ public class DBManager {
 		c.close();
 		return fans;
 	}
+	
+	// 查询你搜索的那个人所关注的人
+	public List<Fan> query40() {
+		ArrayList<Fan> fans = new ArrayList<Fan>();
+		String theusername = Search.theusername;
+		Cursor c = db.rawQuery("SELECT * FROM fan where name like ?",
+				new String[] { theusername });
+		while (c.moveToNext()) {
+			Fan fan = new Fan();
+			fan._id = c.getInt(c.getColumnIndex("_id"));
+			fan.name = c.getString(c.getColumnIndex("name"));
+			fan.ilike = c.getString(c.getColumnIndex("ilike"));
+			fans.add(fan);
+		}
+		c.close();
+		return fans;
+	}
 
 	// 查询关注你的人（你的粉丝）
 	public List<Fan> query5() {
@@ -254,6 +297,23 @@ public class DBManager {
 		c.close();
 		return fans;
 	}
+	
+	// 查询关注你搜索的那个人的人（那个人的粉丝）
+		public List<Fan> query50() {
+			ArrayList<Fan> fans = new ArrayList<Fan>();
+			String theusername = Search.theusername;
+			Cursor c = db.rawQuery("SELECT * FROM fan where ilike like ?",
+					new String[] { theusername });
+			while (c.moveToNext()) {
+				Fan fan = new Fan();
+				fan._id = c.getInt(c.getColumnIndex("_id"));
+				fan.name = c.getString(c.getColumnIndex("name"));
+				fan.ilike = c.getString(c.getColumnIndex("ilike"));
+				fans.add(fan);
+			}
+			c.close();
+			return fans;
+		}
 
 	/**
 	 * query all persons, return cursor

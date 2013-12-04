@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class Followers extends Activity {
+public class Followers0 extends Activity {
 	ListView FollowerList = null;
 	HashMap<String, Object> item = null;
 	private DBManager mgr;
@@ -22,7 +22,7 @@ public class Followers extends Activity {
 		mgr = new DBManager(this);
 		FollowerList = (ListView) findViewById(R.id.listView1);
 
-		List<Fan> fans = mgr.query5();
+		List<Fan> fans = mgr.query50();
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (Fan fan0 : fans) {
 			HashMap<String, String> map = new HashMap<String, String>();

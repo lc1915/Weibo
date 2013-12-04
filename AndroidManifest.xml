@@ -49,11 +49,27 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name="lll.weibo.WeiboList0"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="lll.weibo.Search"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="lll.weibo.Followings"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="lll.weibo.Followers"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="lll.weibo.Followings0"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="lll.weibo.Followers0"
             android:label="@string/app_name" >
         </activity>
     </application>

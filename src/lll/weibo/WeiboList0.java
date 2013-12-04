@@ -4,14 +4,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class Followers extends Activity {
-	ListView FollowerList = null;
+public class WeiboList0 extends Activity {
+	ListView mTweetList = null;
 	HashMap<String, Object> item = null;
 	private DBManager mgr;
 
@@ -20,20 +28,20 @@ public class Followers extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.weibo_list);
 		mgr = new DBManager(this);
-		FollowerList = (ListView) findViewById(R.id.listView1);
-
-		List<Fan> fans = mgr.query5();
+		mTweetList = (ListView) findViewById(R.id.listView1);
+		//Display(getIntent().getStringExtra("json"));
+		List<Tweet> tweets = mgr.query10();
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
-		for (Fan fan0 : fans) {
+		for (Tweet tweet0 : tweets) {
 			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("name", fan0.name);
-			map.put("ilike", fan0.ilike);
+			map.put("name", tweet0.name);
+			map.put("tweet", tweet0.tweet);
 			list.add(map);
 		}
 		SimpleAdapter adapter = new SimpleAdapter(this, list,
 				android.R.layout.simple_list_item_2, new String[] { "name",
-						null }, new int[] { android.R.id.text1,
+						"tweet" }, new int[] { android.R.id.text1,
 						android.R.id.text2 });
-		FollowerList.setAdapter(adapter);
+		mTweetList.setAdapter(adapter);
 	}
 }

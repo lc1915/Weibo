@@ -41,13 +41,16 @@ public class Dierge0 extends Activity {
 	Button weiboButton = null;
 	Button guanzhu = null;
 	Button search = null;
-	Button back=null;
+	Button back = null;
+	Button guanzhushuButton = null;
+	Button fensishuButton = null;
 	ArrayList<HashMap<String, Object>> mTweets = null;
 	SimpleAdapter mAdapter = null;
 	HashMap<String, Object> item = null;
 
 	String a = null;
 	TextView t = null;
+	Integer b=null;
 	private DBManager mgr;
 
 	JSONObject json0;
@@ -77,7 +80,7 @@ public class Dierge0 extends Activity {
 		mgr = new DBManager(this);
 		Person person = mgr.query2();
 		Integer a = person.followings;
-		Integer b = person.followers;
+		b = person.followers;
 		Integer c = person.age;
 		selectedImage.setImageURI(Uri.parse(person.background));
 		selectedImage1.setImageURI(Uri.parse(person.icon));
@@ -107,6 +110,32 @@ public class Dierge0 extends Activity {
 		mTweets1.setText("微博(" + i + ")");
 		wbs.setText(" " + i + " ");
 
+		// 查询登陆用户的关注数
+		List<Fan> fans = mgr.query40();
+		ArrayList<Map<String, String>> list0 = new ArrayList<Map<String, String>>();
+		int j = 0;
+		for (Fan fan0 : fans) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("name", fan0.name);
+			map.put("ilike", fan0.ilike);
+			list0.add(map);
+			j++;
+		}
+		guanzhushu.setText("  " + j + "　");
+
+		// 查询登陆用户的粉丝数
+		List<Fan> fans0 = mgr.query50();
+		ArrayList<Map<String, String>> list1 = new ArrayList<Map<String, String>>();
+		int k = 0;
+		for (Fan fan0 : fans0) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("name", fan0.name);
+			map.put("ilike", fan0.ilike);
+			list1.add(map);
+			k++;
+		}
+		fensishu.setText("  " + k + "　");
+
 		// 点击ImageButton“写微博”
 		final String nichengs = nicheng.getText().toString();
 
@@ -127,9 +156,29 @@ public class Dierge0 extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent();
-				intent.setClass(Dierge0.this, WeiboList.class);
+				intent.setClass(Dierge0.this, WeiboList0.class);
 				// json0 = MainActivity.Getjson(json0);
 				// intent.putExtra("json", json0.toString());
+				startActivity(intent);
+			}
+		});
+		
+		guanzhushuButton = (Button) findViewById(R.id.buttonGzs);
+		guanzhushuButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setClass(Dierge0.this, Followings0.class);
+				startActivity(intent);
+			}
+		});
+
+		fensishuButton = (Button) findViewById(R.id.buttonFss);
+		fensishuButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent intent = new Intent();
+				intent.setClass(Dierge0.this, Followers0.class);
 				startActivity(intent);
 			}
 		});
@@ -142,11 +191,13 @@ public class Dierge0 extends Activity {
 				Fan fan1 = new Fan(SignIn.username, Search.theusername);
 				fans.add(fan1);
 				mgr.add2(fans);
+				b++;
+				fensishu.setText("  " + b.toString());
 				Toast.makeText(getApplicationContext(), "关注成功！",
 						Toast.LENGTH_SHORT).show();
 			}
 		});
-		
+
 		back = (Button) findViewById(R.id.button2);
 		back.setOnClickListener(new OnClickListener() {
 			@Override
