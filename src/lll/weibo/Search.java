@@ -7,32 +7,28 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-public class Search extends Activity{
-	
+public class Search extends Activity {
+
 	EditText editText;
 	Button searchButton;
-	private DBManager mgr;
 	static String theusername;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.search);
-		
-		mgr = new DBManager(this);
-		
+
 		searchButton = (Button) findViewById(R.id.search);
 		searchButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				editText = (EditText) findViewById(R.id.editText1);
 				theusername = editText.getText().toString();
-					Intent intent = new Intent();
-					intent.setClass(Search.this, Dierge0.class);
-					startActivity(intent);
-					finish();
+				Intent intent = new Intent();
+				intent.setClass(Search.this, Dierge0.class);
+				startActivity(intent);
+				finish();
 			}
 		});
 	}

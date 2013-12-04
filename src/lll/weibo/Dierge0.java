@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
@@ -48,14 +46,8 @@ public class Dierge0 extends Activity {
 	SimpleAdapter mAdapter = null;
 	HashMap<String, Object> item = null;
 
-	String a = null;
-	TextView t = null;
-	Integer b=null;
 	private DBManager mgr;
-
-	JSONObject json0;
-	String mSession = null;
-	int mUserId = -1;
+	static int k0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,15 +71,11 @@ public class Dierge0 extends Activity {
 
 		mgr = new DBManager(this);
 		Person person = mgr.query2();
-		Integer a = person.followings;
-		b = person.followers;
 		Integer c = person.age;
 		selectedImage.setImageURI(Uri.parse(person.background));
 		selectedImage1.setImageURI(Uri.parse(person.icon));
 		nicheng.setText(person.name);
 		gender.setText(" " + person.gender);
-		guanzhushu.setText("  " + a.toString());
-		fensishu.setText("  " + b.toString());
 		nianling.setText("   " + c.toString() + "岁");
 		jianjie.setText("简介：" + person.info);
 
@@ -110,7 +98,7 @@ public class Dierge0 extends Activity {
 		mTweets1.setText("微博(" + i + ")");
 		wbs.setText(" " + i + " ");
 
-		// 查询登陆用户的关注数
+		// 查询搜索的用户的关注数
 		List<Fan> fans = mgr.query40();
 		ArrayList<Map<String, String>> list0 = new ArrayList<Map<String, String>>();
 		int j = 0;
@@ -123,7 +111,7 @@ public class Dierge0 extends Activity {
 		}
 		guanzhushu.setText("  " + j + "　");
 
-		// 查询登陆用户的粉丝数
+		// 查询搜索的用户的粉丝数
 		List<Fan> fans0 = mgr.query50();
 		ArrayList<Map<String, String>> list1 = new ArrayList<Map<String, String>>();
 		int k = 0;
@@ -134,21 +122,8 @@ public class Dierge0 extends Activity {
 			list1.add(map);
 			k++;
 		}
+		k0 = k;
 		fensishu.setText("  " + k + "　");
-
-		// 点击ImageButton“写微博”
-		final String nichengs = nicheng.getText().toString();
-
-		writeWeibo = (ImageButton) findViewById(R.id.imageButton2);
-		writeWeibo.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent();
-				intent.setClass(Dierge0.this, WriteWeibo.class);
-				intent.putExtra("nicheng", nichengs);
-				startActivityForResult(intent, 2);
-			}
-		});
 
 		// 点击Button“微博”
 		weiboButton = (Button) findViewById(R.id.buttonWeibo);
@@ -157,12 +132,10 @@ public class Dierge0 extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setClass(Dierge0.this, WeiboList0.class);
-				// json0 = MainActivity.Getjson(json0);
-				// intent.putExtra("json", json0.toString());
 				startActivity(intent);
 			}
 		});
-		
+
 		guanzhushuButton = (Button) findViewById(R.id.buttonGzs);
 		guanzhushuButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -191,8 +164,8 @@ public class Dierge0 extends Activity {
 				Fan fan1 = new Fan(SignIn.username, Search.theusername);
 				fans.add(fan1);
 				mgr.add2(fans);
-				b++;
-				fensishu.setText("  " + b.toString());
+				k0++;
+				fensishu.setText("  " + k0);
 				Toast.makeText(getApplicationContext(), "关注成功！",
 						Toast.LENGTH_SHORT).show();
 			}

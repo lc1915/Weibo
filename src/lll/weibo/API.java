@@ -13,8 +13,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.Environment;
-import android.text.Html;
-import android.util.Log;
 import android.util.Pair;
 
 public class API {

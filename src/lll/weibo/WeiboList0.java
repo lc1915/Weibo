@@ -4,17 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -27,9 +19,10 @@ public class WeiboList0 extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.weibo_list);
+		
 		mgr = new DBManager(this);
 		mTweetList = (ListView) findViewById(R.id.listView1);
-		//Display(getIntent().getStringExtra("json"));
+		
 		List<Tweet> tweets = mgr.query10();
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		for (Tweet tweet0 : tweets) {

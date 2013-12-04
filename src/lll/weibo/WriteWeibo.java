@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import lll.weibo.R.string;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,10 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
@@ -101,7 +95,7 @@ public class WriteWeibo extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent();
 				intent.setClass(WriteWeibo.this, Dierge.class);
-				//setResult(3, intent);
+				startActivity(intent);
 				finish();
 			}
 		});
@@ -130,8 +124,6 @@ public class WriteWeibo extends Activity {
 
 				Intent intent = new Intent();
 				intent.setClass(WriteWeibo.this, Dierge.class);
-				//intent.putExtra("newweibo", newWeibo1);
-				//setResult(2, intent);
 				startActivity(intent);
 				finish();
 			}
@@ -152,7 +144,6 @@ public class WriteWeibo extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
